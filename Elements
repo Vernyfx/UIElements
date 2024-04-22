@@ -22,7 +22,9 @@ function Elements.Init(WindowOptions,TabsInit)
         MinimizeKey = WindowOptions.MinimizeKey -- Used when theres no MinimizeKeybind
     })
 
-    Tabs = TabsInit
+    for i,v in pairs(TabsInit) do
+        Tabs[i] = Window:AddTab({ Title = v.Title, Icon = v.Icon })
+    end
 end
 
 -- Fluent Custom Functions
