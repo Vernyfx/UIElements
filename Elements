@@ -1,4 +1,29 @@
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+--Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
+local Tabs = {}
+
+local Options = Fluent.Options
+
 local Elements = {}
+
+function Elements.Init(WindowOptions,TabsInit)
+    local ScriptVersion = "1.0"
+
+    local Window = Fluent:CreateWindow({
+        Title = WindowOptions.Title,
+        SubTitle = WindowOptions.SubTitle,
+        TabWidth = WindowOptions.TabWidth,
+        Size = WindowOptions.Size,
+        Acrylic = WindowOptions.Acrylic, -- The blur may be detectable, setting this to false disables blur entirely
+        Theme = WindowOptions.Theme,
+        MinimizeKey = WindowOptions.MinimizeKey -- Used when theres no MinimizeKeybind
+    })
+
+    Tabs = TabsInit
+end
 
 -- Fluent Custom Functions
 
@@ -6,7 +31,7 @@ local Toggles = {}
 _G.SF = {}
 local insertedNumbers = {}
 
-function Elements.CreateToggle(Tab, Name, ValueName, DoFunction, DontSpawn, DoAfterDestroy)
+function Elements:CreateToggle(Tab, Name, ValueName, DoFunction, DontSpawn, DoAfterDestroy)
 
     local ToggleNum = #Toggles + 1
     local randomNum = 0
@@ -53,7 +78,7 @@ function Elements.CreateToggle(Tab, Name, ValueName, DoFunction, DontSpawn, DoAf
     return Toggle
 end
 
-function Elements.CreateNotification(title,content,subcontent,duration)
+function Elements:CreateNotification(title,content,subcontent,duration)
     return Fluent:Notify({
         Title = title,
         Content = content,
@@ -62,14 +87,14 @@ function Elements.CreateNotification(title,content,subcontent,duration)
     })
 end
 
-function Elements.CreateParagraph(Tab,title,content)
+function Elements:CreateParagraph(Tab,title,content)
     return Tabs[Tab]:AddParagraph({
         Title = title,
         Content = content
     })
 end
 
-function Elements.CreateSlider(Tab, name, description,OptionsTable, ValueName, DoFunction, Function)
+function Elements:CreateSlider(Tab, name, description,OptionsTable, ValueName, DoFunction, Function)
     if type(OptionsTable) == "table" then
 
         local Slider = Tabs[Tab]:AddSlider(ValueName, {
@@ -93,7 +118,7 @@ function Elements.CreateSlider(Tab, name, description,OptionsTable, ValueName, D
     end
 end
 
-function Elements.CreateDropdown(Tab,ValueName,Name,Options,DoFunction,Function)
+function Elements:CreateDropdown(Tab,ValueName,Name,Options,DoFunction,Function)
 
     local Dropdown = Tabs[Tab]:AddDropdown(ValueName, {
         Title = Name,
@@ -112,7 +137,7 @@ function Elements.CreateDropdown(Tab,ValueName,Name,Options,DoFunction,Function)
     return Dropdown
 end
 
-function Elements.CreateMultiDropdown(Tab,ValueName,Name,Options,description,DoFunction,Function)
+function Elements:CreateMultiDropdown(Tab,ValueName,Name,Options,description,DoFunction,Function)
 
     local Def
 
@@ -146,7 +171,7 @@ function Elements.CreateMultiDropdown(Tab,ValueName,Name,Options,description,DoF
     return MultiDropdown
 end
 
-function Elements.CreateInput(Tab,ValueName,Name,PlaceholderText,NumbersOnly,DoFunction,Function)
+function Elements:CreateInput(Tab,ValueName,Name,PlaceholderText,NumbersOnly,DoFunction,Function)
     local Input = Tabs[Tab]:AddInput(ValueName, {
         Title = Name,
         Default = _G.Settings[ValueName],
@@ -164,7 +189,7 @@ function Elements.CreateInput(Tab,ValueName,Name,PlaceholderText,NumbersOnly,DoF
     return Input
 end
 
-function Elements.CreateSection(Tab,SectionName)
+function Elements:CreateSection(Tab,SectionName)
     Tabs[Tab]:AddSection(SectionName)
 end
 
